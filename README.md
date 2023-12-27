@@ -56,7 +56,19 @@ The Airflow DAG (`dags/postgres.py`) is responsible for orchestrating the data p
 
 ## Database Setup
 
-Set up your database by running the necessary SQL scripts found in the `database/` directory. Alternatively, use Docker to run a database container.
+Set up your database by running 
+
+```
+docker run -d --name challenge_pg -v my_dbdata:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=mercado_libre_data postgres `
+```
+
+You can access the databse by running
+
+```
+docker exec -it challenge_pg psql -U postgres -d mercado_libre_data
+```
+
+Alternatively, you could install `PostgreSQL` and make your own setup.
 
 ## Running the Pipeline
 
