@@ -11,14 +11,13 @@ This project implements a data pipeline using Apache Airflow to gather informati
 6. [Database Setup](#database-setup)
 7. [Running the Pipeline](#running-the-pipeline)
 8. [Email Alerts](#email-alerts)
-9. [Bonus Features](#bonus-features)
-10. [Testing](#testing)
-11. [Automation](#automation)
-12. [Design and Documentation](#design-and-documentation)
+9. [Limitations and Future Improvements](#limitations-and-future-improvements)
 
 ## Introduction
 
 This project aims to create a data pipeline that interacts with the MercadoLibre public API to gather item information, save it in a database, and send email alerts based on specific criteria. The pipeline is implemented using Apache Airflow, and the tasks are organized into a Directed Acyclic Graph (DAG).
+
+The 
 
 ## Prerequisites
 
@@ -73,29 +72,17 @@ Visit `http://localhost:8080` to access the Airflow web UI and trigger the DAG m
 
 Email alerts are sent when the data gathering task runs and detects items with a total value exceeding $7,000,000. Configure your email settings in the `send_alerts.py` script.
 
-## Bonus Features
+## Limitations and Future Improvements
 
-- The project includes unit and end-to-end tests in the `tests/` directory.
-- Additional metadata and data lineage information can be found in the Airflow DAG.
-- Automation is achieved through the scheduled execution of the Airflow DAG.
-- The design and documentation adhere to best practices for clarity and ease of understanding.
+While the core functionality of the data pipeline has been implemented, there are certain limitations and areas for future improvements:
 
-## Testing
+- **Bonus Features:** The bonus features, such as deployability, unit/E2E testing, additional metadata, data lineage information, and automation, have not been implemented in this version of the project.
 
-Run tests using the following command:
+- **Code Quality:** The project code can be further improved for readability, maintainability, and adherence to best coding practices. Consider refactoring and optimizing the code as needed.
 
-```bash
-pytest tests/
-```
+- **Enhancements:** Explore opportunities for enhancing the functionality of the data pipeline, adding more features, or integrating with additional services.
 
-## Automation
+- **User Documentation:** Provide comprehensive user documentation for setting up and configuring the pipeline, making it more accessible to a wider audience.
 
-The Airflow DAG is scheduled to run daily, automating the data gathering and alerting process.
-
-## Design and Documentation
-
-The project is designed with modularity and maintainability in mind. Detailed documentation is provided in each script and the DAG definition for a comprehensive understanding of the pipeline's functionality.
-
-Feel free to explore the code, run tests, and customize the pipeline according to your needs. If you encounter any issues, please refer to the troubleshooting section in the documentation or contact the project maintainers.
-
+Feel free to contribute to the project by addressing these limitations and implementing new features. Your contributions are welcome!
 
