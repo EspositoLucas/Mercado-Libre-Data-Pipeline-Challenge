@@ -62,7 +62,7 @@ Set up your database by running
 docker run -d --name challenge_pg -v my_dbdata:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=mercado_libre_data postgres `
 ```
 
-You can access the databse by running
+You can access the database by running
 
 ```
 docker exec -it challenge_pg psql -U postgres -d mercado_libre_data
