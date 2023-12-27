@@ -17,7 +17,7 @@ This project implements a data pipeline using Apache Airflow to gather informati
 
 This project aims to create a data pipeline that interacts with the MercadoLibre public API to gather item information, save it in a database, and send email alerts based on specific criteria. The pipeline is implemented using Apache Airflow, and the tasks are organized into a Directed Acyclic Graph (DAG).
 
-The 
+You can find the challenge [here](Challenge.pdf) 
 
 ## Prerequisites
 
