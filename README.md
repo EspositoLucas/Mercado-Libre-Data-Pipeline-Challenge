@@ -1,4 +1,4 @@
-# MercadoLibre Data Pipeline Challenge
+# Mercado Libre Data Pipeline Challenge
 
 This project implements a data pipeline using Apache Airflow to gather information about items published on the MercadoLibre ecommerce site, store it in a database, and send email alerts based on specific criteria.
 
