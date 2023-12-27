@@ -33,21 +33,17 @@ Before running the project, ensure you have the following installed:
 ```
 mercadolibre_data_pipeline/
 |-- dags/
-|   |-- mercado_pipeline.py
+|   |-- postgres.py
 |-- scripts/
-|   |-- gather_data.py
-|   |-- send_alerts.py
-|-- tests/
-|   |-- test_gather_data.py
-|   |-- test_send_alerts.py
-|-- requirements.txt
+|   |-- api_fetch.py
+|   |-- PostgresFileOperator.py
+|-- docker-compose.yaml
 |-- README.md
 ```
 
 - **dags/**: Contains the Airflow DAG definition.
 - **scripts/**: Contains the Python scripts for gathering data and sending alerts.
-- **tests/**: Contains unit and end-to-end tests.
-- **requirements.txt**: Lists project dependencies.
+- **docker-compose.yaml**: Lists project dependencies to run airflow and setup the database.
 
 ## Configuration
 
@@ -55,7 +51,7 @@ Adjust the configuration files in the `scripts/` directory to include your Merca
 
 ## Airflow DAG
 
-The Airflow DAG (`dags/mercado_pipeline.py`) is responsible for orchestrating the data pipeline. It defines tasks for gathering data and sending alerts, specifying their dependencies and execution order.
+The Airflow DAG (`dags/postgres.py`) is responsible for orchestrating the data pipeline. It defines tasks for gathering data and sending alerts, specifying their dependencies and execution order.
 
 ## Database Setup
 
@@ -70,7 +66,7 @@ Visit `http://localhost:8080` to access the Airflow web UI and trigger the DAG m
 
 ## Email Alerts
 
-Email alerts are sent when the data gathering task runs and detects items with a total value exceeding $7,000,000. Configure your email settings in the `send_alerts.py` script.
+Email alerts are sent when the data gathering task runs and detects items with a total value exceeding $7,000,000. Configure your email settings in the `PostgresFileOperator.py` script.
 
 ## Limitations and Future Improvements
 
