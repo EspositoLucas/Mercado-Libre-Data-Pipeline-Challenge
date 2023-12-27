@@ -98,6 +98,4 @@ The project is designed with modularity and maintainability in mind. Detailed do
 
 Feel free to explore the code, run tests, and customize the pipeline according to your needs. If you encounter any issues, please refer to the troubleshooting section in the documentation or contact the project maintainers.
 
-Happy coding!
-
 
