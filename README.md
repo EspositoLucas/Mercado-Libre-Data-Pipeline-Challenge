@@ -38,12 +38,13 @@ mercadolibre_data_pipeline/
 |   |-- api_fetch.py
 |   |-- PostgresFileOperator.py
 |-- docker-compose.yaml
+|-- .env
 |-- README.md
 ```
 
 - **dags/**: Contains the Airflow DAG definition.
 - **scripts/**: Contains the Python scripts for gathering data and sending alerts.
-- **docker-compose.yaml**: Lists project dependencies to run airflow and setup the database.
+- **docker-compose.yaml -  .env**: Lists project dependencies to run airflow and setup the database.
 
 ## Configuration
 
