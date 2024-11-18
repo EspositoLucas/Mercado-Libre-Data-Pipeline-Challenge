@@ -93,5 +93,3 @@ While the core functionality of the data pipeline has been implemented, there ar
 
 - **User Documentation:** Provide comprehensive user documentation for setting up and configuring the pipeline, making it more accessible to a wider audience.
 
-Feel free to contribute to the project by addressing these limitations and implementing new features. Your contributions are welcome!
-
