@@ -3,83 +3,122 @@
 This project implements a data pipeline using Apache Airflow to gather information about items published on the MercadoLibre ecommerce site, store it in a database, and send email alerts based on specific criteria.
 
 ## Table of Contents
-1. [Introduction](#introduction)
-2. [Prerequisites](#prerequisites)
-3. [Project Structure](#project-structure)
-4. [Configuration](#configuration)
-5. [Airflow DAG](#airflow-dag)
-6. [Database Setup](#database-setup)
-7. [Running the Pipeline](#running-the-pipeline)
-8. [Email Alerts](#email-alerts)
-9. [Limitations and Future Improvements](#limitations-and-future-improvements)
+- [Mercado Libre Data Pipeline Challenge](#mercado-libre-data-pipeline-challenge)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Prerequisites](#prerequisites)
+  - [Project Structure](#project-structure)
+  - [Configuration](#configuration)
+  - [Database Setup](#database-setup)
+  - [Running the Pipeline](#running-the-pipeline)
+  - [Pipeline Tasks](#pipeline-tasks)
+  - [Email Alerts](#email-alerts)
+  - [Limitations and Future Improvements](#limitations-and-future-improvements)
 
 ## Introduction
 
-This project aims to create a data pipeline that interacts with the MercadoLibre public API to gather item information, save it in a database, and send email alerts based on specific criteria. The pipeline is implemented using Apache Airflow, and the tasks are organized into a Directed Acyclic Graph (DAG).
-
-You can find the challenge [here](Challenge.pdf) 
+This project implements an automated data pipeline that:
+- Fetches product data from MercadoLibre's API
+- Stores the data in a PostgreSQL database
+- Sends email alerts for high-value inventory items
+- Uses Apache Airflow for orchestration
 
 ## Prerequisites
 
-Before running the project, ensure you have the following installed:
-
-- [Apache Airflow](https://airflow.apache.org/)
-- [Python](https://www.python.org/) (version specified in `requirements.txt`)
-- [Docker](https://www.docker.com/) (optional for database setup)
-- [Database (e.g., PostgreSQL)](https://www.postgresql.org/) for storing item information
+- Docker and Docker Compose
+- Python 3.8+
+- MercadoLibre API credentials
+- Gmail account with App Password for email notifications
 
 ## Project Structure
 
 ```
-mercadolibre_data_pipeline/
-|-- dags/
-|   |-- postgres.py
-|-- scripts/
-|   |-- api_fetch.py
-|   |-- PostgresFileOperator.py
-|-- docker-compose.yaml
-|-- .env
-|-- README.md
+Mercado-Libre-Data-Pipeline-Challenge/
+├── dags/
+│   └── postgres.py              # Main Airflow DAG definition
+├── plugins/
+│   ├── operators/
+│   │   └── PostgresFileOperator.py  # Custom Airflow operator
+│   └── tmp/
+│       ├── api_fetch.py         # MercadoLibre API interaction script
+│       └── file.tsv            # Temporary data storage
+├── docker-compose.yaml          # Docker services configuration
+├── .env                        # Environment variables
+└── README.md
 ```
-
-- **dags/**: Contains the Airflow DAG definition.
-- **scripts/**: Contains the Python scripts for gathering data and sending alerts.
-- **docker-compose.yaml -  .env**: Lists project dependencies to run airflow and setup the database.
 
 ## Configuration
 
-Adjust the configuration files in the `scripts/` directory to include your MercadoLibre API key, database connection details, and email settings.
+1. Create a `.env` file with the following variables:
+```
+BEARER_TOKEN=your_mercadolibre_token
+EMAIL_PASSWORD=your_gmail_app_password
+```
 
-## Airflow DAG
-
-The Airflow DAG (`dags/postgres.py`) is responsible for orchestrating the data pipeline. It defines tasks for gathering data and sending alerts, specifying their dependencies and execution order.
+2. Set up Airflow variables in the UI:
+- `project_path`: `/opt/airflow`
+- `BEARER_TOKEN`: Your MercadoLibre API token
+- `EMAIL_PASSWORD`: Your Gmail app password
 
 ## Database Setup
 
-Set up your database by running 
+The project uses PostgreSQL for data storage. Tables are created automatically by the pipeline.
 
+Schema:
+```sql
+create table if not exists mercado_libre_data (
+    id varchar(100), 
+    site_id varchar(100), 
+    title varchar(100),
+    price varchar(100),
+    available_quantity varchar(100),
+    thumbnail varchar(100),
+    created_date varchar(100),
+    primary key(id, created_date)
+);
 ```
-docker run -d --name challenge_pg -v my_dbdata:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=mercado_libre_data postgres `
-```
-
-You can access the database by running
-
-```
-docker exec -it challenge_pg psql -U postgres -d mercado_libre_data
-```
-
-Alternatively, you could install `PostgreSQL` and make your own setup.
 
 ## Running the Pipeline
 
-1. Start the Airflow web server: `airflow webserver -p 8080`
-2. Start the Airflow scheduler: `airflow scheduler`
+1. Start the Docker containers:
+```bash
+docker-compose up -d
+```
 
-Visit `http://localhost:8080` to access the Airflow web UI and trigger the DAG manually or wait for the scheduled run.
+2. Access Airflow UI:
+```
+http://localhost:8080
+```
+Default credentials:
+- Username: airflow
+- Password: airflow
+
+3. Enable the "postgres" DAG in the Airflow UI
+
+## Pipeline Tasks
+
+The pipeline consists of four main tasks:
+
+1. `create_table`: Creates the PostgreSQL table if it doesn't exist
+2. `consulting_API`: Fetches data from MercadoLibre API
+3. `insert_data`: Loads the fetched data into PostgreSQL
+4. `reading_data`: Queries high-value items and sends email alerts
+
+Task Dependencies:
+```
+create_table >> consulting_API >> insert_data >> reading_data
+```
 
 ## Email Alerts
 
-Email alerts are sent when the data gathering task runs and detects items with a total value exceeding $7,000,000. Configure your email settings in the `PostgresFileOperator.py` script.
+The pipeline sends email alerts for items with:
+- Available quantity > 0
+- Total value (price × quantity) > 7,000,000
+
+Email Configuration:
+- Sender: Gmail account with App Password
+- Protocol: SMTP over SSL (port 465)
+- Content: List of matching items with details
 
 ## Limitations and Future Improvements
 
